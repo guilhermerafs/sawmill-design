@@ -2,7 +2,7 @@ name: Deploy to GitHub Pages
 
 on:
   push:
-    branches: [claude/epic-maxwell-r95vbd, main]
+    branches: [claude/epic-maxwell-r95vbd]
   workflow_dispatch:
 
 permissions:
