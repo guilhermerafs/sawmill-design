@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sawmill</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/app.css">
+</head>
+<body>
+  <header class="top">
+    <div class="brand">
+      <svg viewBox="0 0 40 40" class="brand-mark" aria-hidden="true">
+        <circle cx="20" cy="20" r="18"/><circle cx="20" cy="20" r="13"/><circle cx="21" cy="19" r="8"/><circle cx="21.5" cy="18.5" r="3.5"/>
+      </svg>
+      <div>
+        <h1>Sawmill</h1>
+        <p>a workbench for wood-born images</p>
+      </div>
+    </div>
+    <nav id="tabs" aria-label="Generators"></nav>
+  </header>
+
+  <main class="bench">
+    <section class="stage-wrap">
+      <div class="stage-head">
+        <div>
+          <h2 id="gen-name"></h2>
+          <p id="gen-blurb"></p>
+        </div>
+        <div class="seg" id="sizes" aria-label="Canvas size">
+          <button data-size="square">1:1</button>
+          <button data-size="portrait">4:5</button>
+          <button data-size="landscape">3:2</button>
+          <button data-size="story">9:16</button>
+        </div>
+      </div>
+      <div class="mat"><canvas id="stage" width="1200" height="1200"></canvas></div>
+      <div class="transport">
+        <button id="play" class="btn primary"></button>
+        <button id="restart" class="btn"><i class="ico restart"></i>Restart</button>
+        <button id="reseed" class="btn"><i class="ico dice"></i>Reseed</button>
+        <button id="reset" class="btn ghost">Defaults</button>
+        <span class="spacer"></span>
+        <span class="stat">t <b id="stat-time">0.0 s</b></span>
+        <span class="stat">build <b id="stat-setup">–</b></span>
+        <button id="record" class="btn"><i class="ico dot"></i>Rec 8s</button>
+        <button id="export" class="btn primary"><i class="ico down"></i>PNG</button>
+      </div>
+      <p class="hint">Drag knobs up/down · shift for fine · wheel · double-click resets · the small pip under a knob lets it drift while playing · keys: space, r, s, 1–5</p>
+    </section>
+    <aside id="rack" class="rack" aria-label="Controls"></aside>
+  </main>
+
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>
