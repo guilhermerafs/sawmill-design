@@ -345,7 +345,7 @@ export default {
     if (playing && motion === 0) {
       const p = ((t * P.speed) / 13) % 1;
       const g = clamp(p / 0.7);
-      reveal = 1.075 * Math.pow(g, 0.85);
+      reveal = 1.17 * Math.pow(g, 0.85);
       fade = ss(0.94, 1.0, p);
     } else if (playing && motion === 1) {
       breathe = true; tb = t * P.speed * 0.7;
@@ -387,7 +387,7 @@ export default {
         // fast path: clearly outside the log
         if (bd < -26 * sc && A > 1) {
           const pj = 1 + (gr - 0.5) * 0.045 - fib * 0.07 + (bl - 0.5) * 0.035;
-          const shd = style === 2 ? Math.exp(-(-bd) / (0.014 * Rbar)) * 0.3 : 0;
+          const shd = style === 2 ? Math.exp(-(-bd) / (0.011 * Rbar)) * 0.24 : 0;
           const pk = pj * (1 - shd);
           out[q] = paper[0] * pk; out[q + 1] = paper[1] * pk; out[q + 2] = paper[2] * pk; out[q + 3] = 255;
           continue;
@@ -409,7 +409,7 @@ export default {
         }
 
         let U = v[0];
-        if (breathe) U += 0.42 * SIN[(((tb + A * 8 + bl * 5.5) * 162.97466) | 0) & 1023] + 0.25 * SIN[(((tb * 0.63 + A * 3.1) * 162.97466) | 0) & 1023];
+        if (breathe) U += 0.3 * SIN[(((tb + A * 8 + bl * 5.5) * 162.97466) | 0) & 1023] + 0.16 * SIN[(((tb * 0.63 + A * 3.1) * 162.97466) | 0) & 1023];
         const g = v[1];
         const e = 0.62 * sc * g;
         const fl = Math.floor(U);
@@ -419,7 +419,7 @@ export default {
 
         // reveal visibility
         let vis = 1;
-        if (reveal < 1.5) vis = A <= 1 ? clamp((reveal - A) * 45 + 0.5) : clamp((reveal - 1) * 20);
+        if (reveal < 1.5) vis = clamp((reveal - A) * 45 + 0.5);
 
         // rays
         let rs = 0;
@@ -498,7 +498,7 @@ export default {
           const L = ss(0.1, 0.78, f2);
           let tn = L * L * (1 - ss(top - e, top + e, f2)) * (0.5 + 0.55 * sR * (0.45 + lw));
           tn += (0.36 - tn) * eAvg;
-          tn = clamp(tn + (bl - 0.5) * 0.12, 0, 1);
+          tn = clamp((tn + (bl - 0.5) * 0.12) * 1.22, 0, 1);
           const heart = 1 - ss(0.1, 0.95, A);
           const hm = 1 - 0.14 * heart;
           let lr = wl[0] * hm, lg = wl[1] * (1 - 0.18 * heart), lb = wl[2] * (1 - 0.26 * heart);
@@ -531,7 +531,7 @@ export default {
           const dark = 0.22;
           r0 += (wdk[0] * dark - r0) * gap; g0 += (wdk[1] * dark - g0) * gap; b0 += (wdk[2] * dark - b0) * gap;
           // backdrop with soft shadow
-          const shd = (1 - mask) * Math.exp(-Math.max(0, -bd) / (0.028 * Rbar)) * 0.34;
+          const shd = (1 - mask) * Math.exp(-Math.max(0, -bd) / (0.011 * Rbar)) * 0.24;
           const bR = pR * (1 - shd), bG = pG * (1 - shd), bB = pB * (1 - shd);
           const m2 = mask * vis;
           R = bR + (r0 - bR) * m2; G = bG + (g0 - bG) * m2; B = bB + (b0 - bB) * m2;
