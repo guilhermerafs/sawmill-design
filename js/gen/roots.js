@@ -86,7 +86,7 @@ function grow(env, N, starts, A, o) {
       const L = Math.hypot(e[0], e[1]);
       if (L < 1e-9) continue;
       const dx0 = e[0] / L + o.tx * o.g, dy0 = e[1] / L + o.ty * o.g;
-      const a = o.wander * (noise.noise2(N[n].x * o.nf, N[n].y * o.nf + o.off) * 1.8 + rng.gauss() * 0.12);
+      const a = o.wander * (noise.noise2(N[n].x * o.nf, N[n].y * o.nf + o.off) * 1.8 + rng.gauss() * 0.22);
       const c = Math.cos(a), sn = Math.sin(a);
       const rx = dx0 * c - dy0 * sn, ry = dx0 * sn + dy0 * c;
       const dl = Math.hypot(rx, ry) || 1;
@@ -189,11 +189,20 @@ function renderItem(g, it, S, P) {
   } else if (it.t === 2) {
     // leaf cluster: stippled dots
     g.fillStyle = P.ink;
+    g.beginPath();
     for (const d of it.dots) {
-      g.beginPath();
+      g.moveTo(it.x + d[0] + d[2], it.y + d[1]);
       g.arc(it.x + d[0], it.y + d[1], d[2], 0, TAU);
-      g.fill();
     }
+    g.fill();
+    g.strokeStyle = P.ink;
+    g.lineWidth = 0.5 * S.s;
+    g.beginPath();
+    for (const h of it.hatch) {
+      g.moveTo(it.x + h[0], it.y + h[1]);
+      g.lineTo(it.x + h[2], it.y + h[3]);
+    }
+    g.stroke();
   } else if (it.t === 3) {
     // leaf blade: outlined ellipse with paper fill
     g.beginPath();
@@ -212,20 +221,20 @@ export default {
   blurb: 'A root system grown toward buried attractors, tapered by the pipe model, and cut into the paper like an engraving.',
   restartOnPlay: true,
   params: [
-    { key: 'ground', label: 'Ground', type: 'knob', min: 0.2, max: 0.8, step: 0.01, default: 0.4, group: 'Soil' },
-    { key: 'depth', label: 'Depth', type: 'knob', min: 0.15, max: 1, step: 0.01, default: 0.6, group: 'Soil' },
-    { key: 'spread', label: 'Spread', type: 'knob', min: 0.15, max: 1, step: 0.01, default: 0.6, group: 'Soil' },
+    { key: 'ground', label: 'Ground', type: 'knob', min: 0.2, max: 0.8, step: 0.01, default: 0.3, group: 'Soil' },
+    { key: 'depth', label: 'Depth', type: 'knob', min: 0.15, max: 1, step: 0.01, default: 0.85, group: 'Soil' },
+    { key: 'spread', label: 'Spread', type: 'knob', min: 0.15, max: 1, step: 0.01, default: 0.9, group: 'Soil' },
     { key: 'branching', label: 'Branching', type: 'knob', min: 20, max: 220, step: 1, default: 42, unit: 'px', group: 'Growth' },
     { key: 'gravity', label: 'Gravitropism', type: 'knob', min: 0, max: 1, step: 0.01, default: 0.35, group: 'Growth' },
     { key: 'wander', label: 'Wander', type: 'knob', min: 0, max: 1, step: 0.01, default: 0.35, group: 'Growth' },
-    { key: 'step', label: 'Step', type: 'knob', min: 3, max: 20, step: 0.5, default: 8, unit: 'px', group: 'Growth' },
+    { key: 'step', label: 'Step', type: 'knob', min: 3, max: 20, step: 0.5, default: 6, unit: 'px', group: 'Growth' },
     { key: 'taper', label: 'Taper', type: 'knob', min: 1.6, max: 3.2, step: 0.05, default: 2.4, group: 'Growth' },
-    { key: 'thickness', label: 'Max thickness', type: 'knob', min: 4, max: 40, step: 0.5, default: 16, unit: 'px', group: 'Growth' },
+    { key: 'thickness', label: 'Max thickness', type: 'knob', min: 4, max: 40, step: 0.5, default: 14, unit: 'px', group: 'Growth' },
     { key: 'hairs', label: 'Root hairs', type: 'knob', min: 0, max: 1, step: 0.01, default: 0.6, group: 'Growth' },
-    { key: 'speed', label: 'Growth speed', type: 'knob', min: 1, max: 60, step: 0.5, default: 8, unit: ' it/s', live: true, group: 'Growth' },
+    { key: 'speed', label: 'Growth speed', type: 'knob', min: 1, max: 60, step: 0.5, default: 12, unit: ' it/s', live: true, group: 'Growth' },
     { key: 'tree', label: 'Tree', type: 'toggle', default: true, group: 'Tree' },
-    { key: 'crown', label: 'Crown size', type: 'knob', min: 0.2, max: 1, step: 0.01, default: 0.7, group: 'Tree' },
-    { key: 'leaves', label: 'Leaf density', type: 'knob', min: 0, max: 1, step: 0.01, default: 0.5, group: 'Tree' },
+    { key: 'crown', label: 'Crown size', type: 'knob', min: 0.2, max: 1, step: 0.01, default: 0.9, group: 'Tree' },
+    { key: 'leaves', label: 'Leaf density', type: 'knob', min: 0, max: 1, step: 0.01, default: 0.8, group: 'Tree' },
     { key: 'texture', label: 'Soil texture', type: 'knob', min: 0, max: 1, step: 0.01, default: 0.6, group: 'Line' },
     { key: 'ink', label: 'Ink', type: 'color', default: '#2b1d14', group: 'Color' },
     { key: 'paper', label: 'Paper', type: 'color', default: '#efe7d8', group: 'Color' },
@@ -242,7 +251,7 @@ export default {
     const above = gy - 0.03 * h;
     const step = P.step * s;
     const dInfl = P.branching * s;
-    const dKill = step * 1.6;
+    const dKill = step * 1.2;
 
     // ---- growth -----------------------------------------------------------
     const N = [];
@@ -251,7 +260,7 @@ export default {
 
     // Taproot seed, straight down with a slight drift.
     const rRy = P.depth * below * 0.5;
-    const rRx = P.spread * w * 0.44;
+    const rRx = P.spread * w * 0.46;
     const tapLen = Math.max(3, Math.round((rRy * 1.2) / step));
     const tap = [0];
     {
@@ -270,29 +279,29 @@ export default {
     for (let i = 0; i < nLat; i++) {
       const j = Math.floor(rng.range(0.12, 0.8) * (tap.length - 1));
       const side = rng.chance(0.5) ? 1 : -1;
-      const ids = chain(env, N, tap[j], side * rng.range(0.75, 1.25), rng.int(4, 8), N[tap[j]].b + 1.2, 0.15, 0, step, 0.12);
+      const ids = chain(env, N, tap[j], side * rng.range(0.5, 1.1), rng.int(4, 8), N[tap[j]].b + 1.2, 0.15, 0, step, 0.12);
       rootIds.push(...ids);
     }
     // Two near-surface spreaders from the collar, for the shallow fan.
     for (const side of [-1, 1]) {
-      const ids = chain(env, N, 0, side * rng.range(1.2, 1.45), rng.int(4, 6), 0.4, 0.15, 0, step, 0.1);
+      const ids = chain(env, N, 0, side * rng.range(0.7, 1.0), rng.int(4, 6), 0.4, 0.15, 0, step, 0.1);
       rootIds.push(...ids);
     }
 
     // Root attractors: an ellipse below the ground line. Spread widens it, depth deepens it.
-    const RA = sampleEllipse(rng, cx, gy + rRy, rRx, rRy, 2600, (x, y) => {
+    const RA = sampleEllipse(rng, cx, gy + rRy, rRx, rRy, 5000, (x, y) => {
       if (y < gy + 2 * s || y > h - 0.02 * h) return false;
       const f = (y - gy) / (rRy * 2); // 0 at the surface, 1 at the bottom of the ellipse
       return rng() < 0.35 + 0.65 * (1 - f);
     });
     grow(env, N, rootIds, RA, {
       dInfl, dKill, step, tx: 0, ty: 1, g: P.gravity, wander: P.wander,
-      nf: 1 / (140 * s), off: 17.3, maxIter: 700, sys: 0,
+      nf: 1 / (140 * s), off: 17.3, maxIter: 240, sys: 0,
     });
 
     // Crown: a trunk from the collar, then branches growing upward toward a blob of attractors.
     if (P.tree) {
-      const trunkH = above * 0.36;
+      const trunkH = above * 0.3;
       const nT = Math.max(3, Math.round(trunkH / step));
       const trunkIds = [];
       let prev = 0, x = cx;
@@ -304,11 +313,39 @@ export default {
       }
       const ry = P.crown * above * 0.4;
       const ccy = gy - trunkH - ry * 0.9;
-      const CA = sampleEllipse(rng, cx, ccy, ry * 1.3, ry, 1100, (x2, y2) => y2 > 0.02 * h);
+      const CA = sampleEllipse(rng, cx, ccy, ry * 1.3, ry, 2400, (x2, y2) => y2 > 0.02 * h);
       grow(env, N, trunkIds, CA, {
         dInfl, dKill, step, tx: 0, ty: -1, g: P.gravity * 0.5, wander: P.wander,
-        nf: 1 / (140 * s), off: 41.7, maxIter: 700, sys: 1,
+        nf: 1 / (140 * s), off: 41.7, maxIter: 240, sys: 1,
       });
+    }
+
+    // Fine-root pass: tortuous rootlets that fork again and again toward hair-thin tips.
+    const inRoot = (x, y) => {
+      const u = (x - cx) / rRx, v = (y - (gy + rRy)) / rRy;
+      return u * u + v * v <= 1.1;
+    };
+    const fineStep = step * 0.8;
+    const fine = (from, depthLeft) => {
+      let prev = from, x = N[from].x, y = N[from].y;
+      let a = Math.atan2(N[from].x - N[N[from].p].x, N[from].y - N[N[from].p].y);
+      const n = rng.int(3, 6);
+      const b0 = N[from].b + 0.3;
+      for (let q = 0; q < n; q++) {
+        a += rng.gauss() * 0.55;
+        x += Math.sin(a) * fineStep;
+        y += Math.cos(a) * fineStep;
+        if (!inRoot(x, y) || y < gy + 2 * s) break;
+        N.push({ x, y, p: prev, b: b0 + q * 0.12, sys: 0 });
+        prev = N.length - 1;
+      }
+      if (prev === from || depthLeft <= 0) return;
+      const forks = rng.chance(0.75) ? 2 : 1;
+      for (let f = 0; f < forks; f++) fine(prev, depthLeft - 1);
+    };
+    const nRoot = N.length;
+    for (let i = 1; i < nRoot; i++) {
+      if (N[i].sys === 0 && rng.chance(0.06)) fine(i, 3);
     }
 
     // ---- pipe model thickness ----------------------------------------------
@@ -326,6 +363,9 @@ export default {
     let maxB = 0;
     for (let i = 0; i < M; i++) {
       R[i] = Math.max(0.22 * s, rad[i] * k);
+      // flare: the trunk swells into the root collar
+      const dc = Math.hypot(N[i].x - cx, N[i].y - gy);
+      R[i] *= 1 + 0.8 * Math.exp(-dc / (20 * s));
       if (N[i].b > maxB) maxB = N[i].b;
     }
 
@@ -355,25 +395,33 @@ export default {
       }
     }
 
-    // Crown tips: leaf stipple clusters and a few blades.
+    // Crown: stipple and hatch clusters massed at branch tips, sparser along the branches.
     for (let i = 1; i < M; i++) {
-      if (N[i].sys !== 1 || kids[i] || !rng.chance(P.leaves)) continue;
+      if (N[i].sys !== 1) continue;
+      const tip = !kids[i];
+      if (!rng.chance(tip ? P.leaves : P.leaves * 0.3)) continue;
+      const nd = tip ? rng.int(14, 26) : rng.int(6, 12);
+      const rr = rng.range(5, tip ? 11 : 8) * s;
       const dots = [];
-      const nd = rng.int(7, 16);
-      const rr = rng.range(4, 11) * s;
       for (let q = 0; q < nd; q++) {
-        const a = rng.range(0, TAU), d = Math.sqrt(rng.range(0, 1)) * rr;
-        dots.push([Math.cos(a) * d, Math.sin(a) * d, rng.range(0.7, 1.6) * s]);
+        const ang = rng.range(0, TAU), d = Math.sqrt(rng.range(0, 1)) * rr;
+        dots.push([Math.cos(ang) * d, Math.sin(ang) * d, rng.range(0.6, 1.4) * s]);
       }
-      items.push({ t: 2, x: N[i].x, y: N[i].y, dots, b: N[i].b + 1 });
-      const p = N[i].p;
-      const base = Math.atan2(N[i].y - N[p].y, N[i].x - N[p].x);
-      const nb = rng.int(0, 2);
-      for (let q = 0; q < nb; q++) {
+      const hatch = [];
+      const nh = tip ? rng.int(3, 7) : rng.int(1, 3);
+      for (let q = 0; q < nh; q++) {
+        const ang = rng.range(0, TAU), d = Math.sqrt(rng.range(0, 1)) * rr;
+        const x0 = Math.cos(ang) * d, y0 = Math.sin(ang) * d;
+        const ha = rng.range(0, Math.PI), hl = rng.range(3, 6) * s;
+        hatch.push([x0, y0, x0 + Math.cos(ha) * hl, y0 + Math.sin(ha) * hl]);
+      }
+      items.push({ t: 2, x: N[i].x, y: N[i].y, dots, hatch, b: N[i].b + 1 });
+      if (tip && rng.chance(0.3)) {
+        const p = N[i].p;
+        const base = Math.atan2(N[i].y - N[p].y, N[i].x - N[p].x);
         items.push({
-          t: 3, x: N[i].x + rng.gauss() * 3 * s, y: N[i].y + rng.gauss() * 3 * s,
-          ang: base + rng.gauss() * 0.7, len: rng.range(14, 22) * s, wid: rng.range(6, 9) * s,
-          b: N[i].b + 1.5 + q * 0.3,
+          t: 3, x: N[i].x, y: N[i].y, ang: base + rng.gauss() * 0.7,
+          len: rng.range(12, 18) * s, wid: rng.range(5, 8) * s, b: N[i].b + 1.5,
         });
       }
     }
@@ -401,7 +449,7 @@ export default {
     const tex = P.texture;
     if (tex > 0) {
       // horizontal hatch in the soil, thinning with depth
-      for (let y = gy + 4 * s; y < h; y += (2.2 + 9 * Math.pow((y - gy) / (h - gy), 0.8)) * s * rng.range(0.8, 1.2)) {
+      for (let y = gy + 4 * s; y < gy + (h - gy) * 0.4; y += (2.2 + 9 * Math.pow((y - gy) / (h - gy), 0.8)) * s * rng.range(0.8, 1.2)) {
         const f = (y - gy) / (h - gy);
         const n = Math.round((w / (34 * s)) * tex * (1 - f) * 1.0);
         bx2.strokeStyle = P.ink;
@@ -428,20 +476,6 @@ export default {
         bx2.beginPath();
         bx2.arc(rng() * w, y, rng.range(0.4, 0.9) * s, 0, TAU);
         bx2.fill();
-      }
-      // strata: long wavy lines at irregular depths
-      const nStrata = Math.floor(tex * 6);
-      bx2.strokeStyle = P.ink;
-      for (let q = 0; q < nStrata; q++) {
-        const y0 = gy + (h - gy) * rng.range(0.12, 0.92);
-        bx2.globalAlpha = rng.range(0.2, 0.4);
-        bx2.lineWidth = 0.7 * s;
-        bx2.beginPath();
-        for (let x = 0; x <= w; x += 6 * s) {
-          const y = y0 + noise.noise2(x * 0.003, q * 7.1) * 14 * s;
-          if (x === 0) bx2.moveTo(x, y); else bx2.lineTo(x, y);
-        }
-        bx2.stroke();
       }
       bx2.globalAlpha = 1;
     }

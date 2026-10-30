@@ -10,12 +10,12 @@ const TILE = 512; // fine-texture tile (power of two)
 
 // Species feel: palette (0-255), pore amount, ray amount, ring spacing and fibre strength.
 const SPECIES = [
-  { early: [214, 176, 122], late: [126, 82, 42], pore: 1.0, ray: 0.9, ringMul: 0.85, fiber: 0.8 }, // Oak
-  { early: [128, 92, 62], late: [54, 34, 20], pore: 0.35, ray: 0.5, ringMul: 1.0, fiber: 0.6 }, // Walnut
-  { early: [238, 208, 144], late: [186, 130, 64], pore: 0.0, ray: 0.15, ringMul: 0.7, fiber: 1.0 }, // Pine
-  { early: [242, 230, 210], late: [206, 178, 138], pore: 0.05, ray: 0.6, ringMul: 1.3, fiber: 0.4 }, // Maple
-  { early: [60, 48, 42], late: [20, 14, 12], pore: 0.2, ray: 0.2, ringMul: 1.6, fiber: 0.3 }, // Ebony
-  { early: [198, 114, 72], late: [128, 54, 30], pore: 0.3, ray: 0.6, ringMul: 1.0, fiber: 0.55 }, // Cherry
+  { early: [208, 170, 118], late: [136, 92, 52], pore: 1.0, ray: 0.9, ringMul: 0.85, fiber: 0.8 }, // Oak
+  { early: [102, 68, 50], late: [62, 46, 52], pore: 0.35, ray: 0.5, ringMul: 1.0, fiber: 0.6 }, // Walnut: chocolate, purple-grey latewood
+  { early: [240, 212, 126], late: [204, 116, 38], pore: 0.0, ray: 0.15, ringMul: 0.7, fiber: 1.0 }, // Pine: yellow, orange latewood
+  { early: [246, 238, 222], late: [226, 212, 186], pore: 0.05, ray: 0.6, ringMul: 1.3, fiber: 0.4 }, // Maple: pale cream, faint grain
+  { early: [40, 36, 36], late: [16, 14, 15], pore: 0.2, ray: 0.2, ringMul: 1.6, fiber: 0.3 }, // Ebony: near-black
+  { early: [226, 126, 80], late: [168, 66, 36], pore: 0.3, ray: 0.6, ringMul: 1.0, fiber: 0.55 }, // Cherry: red-orange
 ];
 
 // Integer hash -> [0,1). Stable per (seed, a, b).
@@ -43,6 +43,12 @@ function streakTile(rng, len) {
       sum += src[row + ((((j + len - hh) % n) + n) % n)] - src[row + ((((j - hh) % n) + n) % n)];
     }
   }
+  const cross = new Float32Array(n * n); // 3-tap blur across the grain, avoids 1px aliasing
+  for (let a = 0; a < n; a++) {
+    const a0 = ((a - 1 + n) % n) * n, a1 = a * n, a2 = ((a + 1) % n) * n;
+    for (let j = 0; j < n; j++) cross[a1 + j] = (out[a0 + j] + out[a1 + j] + out[a2 + j]) / 3;
+  }
+  out.set(cross);
   let m = 0;
   for (let k = 0; k < out.length; k++) m += out[k];
   m /= out.length;
@@ -55,11 +61,11 @@ function streakTile(rng, len) {
 
 // Sparse pore seeds stretched into short dashes along the grain.
 function poreTile(rng) {
-  const n = TILE, len = 11;
+  const n = TILE, len = 9;
   const out = new Float32Array(n * n);
   for (let a = 0; a < n; a++) {
     for (let j = 0; j < n; j++) {
-      if (rng() < 0.012) {
+      if (rng() < 0.004) {
         const row = a * n;
         for (let q = 0; q < len; q++) {
           const idx = row + ((j + q) % n);
@@ -83,11 +89,11 @@ export default {
     { key: 'figure', label: 'Figure', type: 'knob', min: 0, max: 1, step: 0.01, default: 0.5, live: true, group: 'Cut' },
     { key: 'speed', label: 'Speed', type: 'knob', min: 0, max: 1, step: 0.01, default: 0.25, live: true, group: 'Cut' },
 
-    { key: 'rings', label: 'Ring density', type: 'knob', min: 3, max: 40, step: 1, default: 11, live: true, group: 'Grain' },
+    { key: 'rings', label: 'Ring density', type: 'knob', min: 3, max: 120, step: 1, default: 40, live: true, group: 'Grain' },
     { key: 'wobble', label: 'Ring wobble', type: 'knob', min: 0, max: 1, step: 0.01, default: 0.4, live: true, group: 'Grain' },
     { key: 'fiber', label: 'Fiber', type: 'knob', min: 0, max: 1, step: 0.01, default: 0.35, live: true, group: 'Grain' },
     { key: 'pores', label: 'Pores', type: 'knob', min: 0, max: 1, step: 0.01, default: 0.4, live: true, group: 'Grain' },
-    { key: 'rays', label: 'Rays', type: 'knob', min: 0, max: 1, step: 0.01, default: 0.3, live: true, group: 'Grain' },
+    { key: 'rays', label: 'Rays', type: 'knob', min: 0, max: 1, step: 0.01, default: 0.2, live: true, group: 'Grain' },
     { key: 'knots', label: 'Knots', type: 'knob', min: 0, max: 1, step: 0.01, default: 0.3, live: true, group: 'Grain' },
 
     { key: 'boards', label: 'Boards', type: 'knob', min: 1, max: 12, step: 1, default: 5, live: true, group: 'Boards' },
@@ -126,8 +132,8 @@ export default {
       }
       return T;
     };
-    st.wob = field(1 / 150, 1 / 900, 2); // ring wobble: short across, long along the grain
-    st.fig = field(1 / 320, 1 / 1400, 2); // figure / curl: slow arches of the cut
+    st.wob = field(1 / 420, 1 / 3000, 2); // ring wobble: short across, long along the grain
+    st.fig = field(1 / 400, 1 / 2000, 2); // figure / curl: slow arches of the cut
 
     st.fiberT = streakTile(rng, 36);
     st.poreT = poreTile(rng);
@@ -171,16 +177,15 @@ export default {
       bOb[b] = hs(seed, b, 1) * M;
       bDb[b] = params.depth + swing + (hs(seed, b, 2) - 0.5) * variation * 0.9;
       bTone[b] = 1 + (hs(seed, b, 3) - 0.5) * variation * 0.4;
-      for (let q = 0; q < 3; q++) {
-        const id = b * 3 + q;
-        if (hs(seed, b, 10 + q * 4) < params.knots * 0.7) {
-          kS[id] = (hs(seed, b, 11 + q * 4) - 0.5) * bwU * 0.75;
-          kZ[id] = (0.1 + hs(seed, b, 12 + q * 4) * 0.8) * Ls;
-          kR[id] = 0.05 + hs(seed, b, 13 + q * 4) * 0.09;
-        } else {
-          kR[id] = 0;
-        }
+      // At most one knot per board, present with probability `knots`.
+      const id = b * 3;
+      kR[id] = 0;
+      if (hs(seed, b, 10) < params.knots) {
+        kS[id] = (hs(seed, b, 11) - 0.5) * bwU * 0.7;
+        kZ[id] = (0.1 + hs(seed, b, 12) * 0.8) * Ls;
+        kR[id] = 0.07 + hs(seed, b, 13) * 0.08;
       }
+      kR[id + 1] = 0; kR[id + 2] = 0;
     }
 
     const Tw = st.wob, Tf = st.fig, FT = st.fiberT, PT = st.poreT;
@@ -195,15 +200,15 @@ export default {
     const tintE = hexToRgb(params.early), tintL = hexToRgb(params.late);
     const E = sp.early.map((v, c) => (v * tintE[c]) / 255);
     const L = sp.late.map((v, c) => (v * tintL[c]) / 255);
-    const knotR = L[0] * 0.62, knotG = L[1] * 0.62, knotB = L[2] * 0.62;
+    const knotR = L[0] * 0.8, knotG = L[1] * 0.8, knotB = L[2] * 0.8;
 
     const Ntot = params.rings * sp.ringMul;
-    const wobAmp = params.wobble * 0.12;
+    const wobAmp = params.wobble * 0.05;
     const figAmp = params.figure * 0.5;
-    const tiltK = tanA * 0.3;
-    const fibK = params.fiber * sp.fiber * 0.22;
+    const tiltK = tanA * 0.22;
+    const fibK = params.fiber * sp.fiber * 0.14;
     const poreK = params.pores * sp.pore;
-    const rayK = params.rays * sp.ray;
+        const rayK = params.rays * sp.ray;
     const sheen = params.sheen;
 
     let hasKnots = false;
@@ -241,7 +246,7 @@ export default {
         const fx = xa - xi, fy = yl - yi;
         const p0 = xi * TN + yi, p1 = p0 + TN;
         const wv = (Tw[p0] * (1 - fx) + Tw[p1] * fx) * (1 - fy) + (Tw[p0 + 1] * (1 - fx) + Tw[p1 + 1] * fx) * fy;
-        const fv = Tf[(fx > 0.5 ? xi + 1 : xi) * TN + (fy > 0.5 ? yi + 1 : yi)];
+        const fv = (Tf[p0] * (1 - fx) + Tf[p1] * fx) * (1 - fy) + (Tf[p0 + 1] * (1 - fx) + Tf[p1 + 1] * fx) * fy;
         const dEff = bDb[b] + tiltK * (zn - 0.5) * Ls + figAmp * (fv - 0.5) * 2;
         let r = Math.sqrt(dEff * dEff + s * s) + wobAmp * (wv - 0.5) * 2;
 
@@ -252,10 +257,10 @@ export default {
           const R = kR[id];
           if (R === 0) continue;
           const ds = s - kS[id];
-          const dz = (l / U - kZ[id]) / 2.2; // elongated along the grain
+          const dz = (l / U - kZ[id]) / 2.8; // elongated along the grain: lens shape
           const qq = Math.sqrt(ds * ds + dz * dz) / R;
           if (qq < 3) {
-            r += R * 0.6 * Math.exp(-1.5 * Math.max(0, qq - 1));
+            r += R * 0.9 * Math.exp(-1.2 * Math.max(0, qq - 1)); // rings flow around the knot
             const core = 1 - smoothstep(0.8, 1.0, qq);
             if (core > kc) { kc = core; kq = qq; }
           }
@@ -263,7 +268,15 @@ export default {
 
         const ph = r * Ntot;
         const g = ph - Math.floor(ph);
-        const lw = smoothstep(0.5, 0.85, g) * (1 - smoothstep(0.92, 1.0, g)); // latewood band, soft at the wrap
+        // Ring-phase change across one rendered pixel (gradient magnitude), used as the AA width.
+        const rr = r > 1e-3 ? r : 1e-3;
+        const gx = (Ntot * Math.abs(s) / rr) * (k / U);
+        const gy = (Ntot * Math.abs(dEff) / rr) * (tiltK * k / U);
+        const aw = Math.min(0.5, Math.max(0.01, Math.sqrt(gx * gx + gy * gy)));
+        // Gradual darkening into latewood, then a sharp edge at the wrap, both antialiased by aw.
+        let lw = smoothstep(0.3, 1 - aw, g) * smoothstep(0, aw, g);
+        // Sub-pixel rings fade toward the mean tone instead of aliasing into moire.
+        lw += (0.5 - lw) * smoothstep(0.06, 0.22, aw) * 0.9;
         const ew0 = 1 - smoothstep(0.2, 0.55, g); // earlywood (pores live here)
         const ew = ew0 * ew0;
 
@@ -286,12 +299,15 @@ export default {
           ray = rayK * line * fleck;
         }
 
-        let m = (1 - 0.55 * pv) * (1 + fibK * (fbv - 0.5) * 2) * (1 - 0.35 * ray) * bTone[b];
+        const tv = (fv - 0.5) * 2; // slow colour drift along the board
+        let m = (1 - 0.4 * pv) * (1 + fibK * (fbv - 0.5) * 2) * (1 - 0.35 * ray) * bTone[b] * (1 + 0.08 * tv);
+        cr *= 1 + 0.03 * tv;
+        cb *= 1 - 0.03 * tv;
         m *= 0.84 + 0.16 * smoothstep(0, 0.04, edgeU);
         cr *= m; cg *= m; cb *= m;
 
         if (kc > 0) {
-          const kf = 0.75 + 0.25 * (kq * 3 - Math.floor(kq * 3));
+          const kf = 0.8 + 0.4 * (kq * 4 - Math.floor(kq * 4)) * (1 - kq * 0.3); // rings inside the knot
           cr += (knotR * kf - cr) * kc;
           cg += (knotG * kf - cg) * kc;
           cb += (knotB * kf - cb) * kc;

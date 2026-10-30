@@ -162,6 +162,8 @@ function buildWood(env, st) {
   for (let x = 0; x < w; x++) {
     col[x] = r1[x] * 0.7 + (r2[(x / 3) | 0] + r2[((x / 3) | 0) + 1]) * 0.45 + (r3[(x / 9) | 0]) * 0.5;
   }
+  const cf = new Float32Array(w), cp = new Float32Array(w);
+  for (let x = 0; x < w; x++) { cf[x] = 0.006 + rng() * 0.03; cp[x] = rng() * 100; }
   const T = new Uint8Array(w * h);
   const amp = 0.1 + 0.2 * we;
   for (let y = 0; y < h; y++) {
@@ -173,7 +175,8 @@ function buildWood(env, st) {
       let q = Math.imul(x, 0x27d4eb2d) ^ Math.imul(y, 0x165667b1);
       q = Math.imul(q ^ (q >>> 15), 0x2c1b3c6d); q ^= q >>> 12;
       const sp = ((q & 255) / 255 - 0.5) * 0.05;
-      const v2 = base + col[x] * amp * (0.3 + m) + sp;
+      const fade = 0.25 + 0.75 * Math.max(0, Math.sin(y * cf[x] + cp[x]) * 0.8 + 0.35);
+      const v2 = base + col[x] * amp * (0.2 + m) * fade + sp;
       T[y * w + x] = clamp(v2, 0, 1) * 255;
     }
   }
@@ -235,7 +238,7 @@ function prepColors(st, p) {
   if (print) {
     const paper = hexToRgb(p.paper), ink = hexToRgb(p.ink);
     const mx = (t) => [lerp(paper[0], ink[0], t), lerp(paper[1], ink[1], t), lerp(paper[2], ink[2], t)];
-    sl = mx(0.1); sd = mx(0.6); cut = mx(0.0); fr = mx(0.55); sh = ink;
+    sl = mx(0.04); sd = mx(0.42); cut = mx(0.0); fr = mx(0.55); sh = ink;
     st.paperC = paper; st.inkC = ink;
   } else {
     sl = hexToRgb(p.surfLight); sd = hexToRgb(p.surfDark); cut = hexToRgb(p.cut);
@@ -487,12 +490,13 @@ function plug(st, ag, len) {
 function hole(st, x, y, rh) {
   const rng = st.rng;
   stamp(st, x, y, rh, st.rag * 0.4);
-  const n = 18 + Math.floor(rng() * 40);
+  const n = 40 + Math.floor(rng() * 70);
   for (let i = 0; i < n; i++) {
     const sx = x + rng.gauss() * rh * 1.1;
-    const sy = y + rh * 0.6 + Math.abs(rng.gauss()) * rh * 3.2;
-    speck(st, sx, sy, 0.55 + rng() * 0.45);
-    if (rng() < 0.5) speck(st, sx + 1, sy, 0.5 + rng() * 0.4);
+    const sy = y + rh * 0.8 + Math.abs(rng.gauss()) * rh * 3.6;
+    speck(st, sx, sy, 0.6 + rng() * 0.4);
+    speck(st, sx + 1, sy, 0.6 + rng() * 0.4);
+    if (rng() < 0.6) speck(st, sx, sy + 1, 0.6 + rng() * 0.4);
   }
 }
 
@@ -588,8 +592,8 @@ function chamberAt(st, x, y, rr) {
 function spawnWorm(st, p, sys) {
   const { rng } = st, sim = st.sim;
   const [x, y] = sys.c;
-  const r0 = Math.max(1.5, st.baseR * 0.2);
-  hole(st, x, y, r0 * 1.7 + 0.5);
+  const r0 = Math.max(1.8, st.baseR * 0.26);
+  hole(st, x, y, r0 * 1.5 + 1.6);
   sim.agents.push(newAgent(st, {
     x, y, a: rng() * Math.PI * 2, r0, life: rng.range(30, 120) * st.len * st.lifeScale,
     grow: 0, wander: p.wander * 1.4 + 0.2, bias: p.grainBias * 0.4, avoid: p.avoid, wv: 0.1, kind: 'worm',
@@ -718,6 +722,6 @@ function endAgent(st, p, ag, r) {
   } else if (ag.kind === 'mother') {
     chamber(st, ag, r * 1.3);
   } else if (ag.kind === 'worm') {
-    if (rng() < 0.55) hole(st, ag.x, ag.y, Math.max(1.6, ag.r0 * 1.6 + 0.5));
+    if (rng() < 0.55) hole(st, ag.x, ag.y, ag.r0 * 1.5 + 1.6);
   }
 }
