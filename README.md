@@ -10,7 +10,11 @@ A browser workbench for wood-born generative images — knobs, dials, live anima
 | 4 | **Texture** | Volumetric wood-grain boards (species, cut depth, knots, rays) |
 | 5 | **Roots** | Botanical root systems grown by space colonization, with optional tree crown |
 
-## Run
+## Live
+
+https://guilhermerafs.github.io/sawmill-design/ (deployed by `.github/workflows/pages.yml` on every push).
+
+## Run locally
 
 No build step. Serve the folder and open it:
 
