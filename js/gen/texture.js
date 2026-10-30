@@ -274,7 +274,7 @@ export default {
         const gy = (Ntot * Math.abs(dEff) / rr) * (tiltK * k / U);
         const aw = Math.min(0.5, Math.max(0.01, Math.sqrt(gx * gx + gy * gy)));
         // Gradual darkening into latewood, then a sharp edge at the wrap, both antialiased by aw.
-        let lw = smoothstep(0.3, 1 - aw, g) * smoothstep(0, aw, g);
+        let lw = smoothstep(0.3, 1 - aw, g) * smoothstep(0, aw * 2.5, g);
         // Sub-pixel rings fade toward the mean tone instead of aliasing into moire.
         lw += (0.5 - lw) * smoothstep(0.06, 0.22, aw) * 0.9;
         const ew0 = 1 - smoothstep(0.2, 0.55, g); // earlywood (pores live here)
@@ -307,7 +307,7 @@ export default {
         cr *= m; cg *= m; cb *= m;
 
         if (kc > 0) {
-          const kf = 0.8 + 0.4 * (kq * 4 - Math.floor(kq * 4)) * (1 - kq * 0.3); // rings inside the knot
+          const kf = 0.9 + 0.15 * (kq * 4 - Math.floor(kq * 4)); // faint rings inside the knot
           cr += (knotR * kf - cr) * kc;
           cg += (knotG * kf - cg) * kc;
           cb += (knotB * kf - cb) * kc;
