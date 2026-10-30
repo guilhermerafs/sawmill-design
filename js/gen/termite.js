@@ -15,34 +15,34 @@ export default {
   params: [
     // Colony
     { key: 'mode', label: 'Insect', type: 'dial', min: 0, max: 2, step: 1, default: 0, options: MODES, group: 'Colony' },
-    { key: 'population', label: 'Colony', type: 'knob', min: 1, max: 24, step: 1, default: 8, group: 'Colony' },
+    { key: 'population', label: 'Colony', type: 'knob', min: 1, max: 30, step: 1, default: 12, group: 'Colony' },
     { key: 'appetite', label: 'Appetite', type: 'knob', min: 0.05, max: 1, step: 0.01, default: 0.55, group: 'Colony' },
     { key: 'speed', label: 'Speed', type: 'knob', min: 0.25, max: 14, step: 0.05, default: 2, group: 'Colony', live: true },
     // Tunnels
-    { key: 'width', label: 'Width', type: 'knob', min: 8, max: 80, step: 1, default: 44, unit: 'px', group: 'Tunnels' },
+    { key: 'width', label: 'Width', type: 'knob', min: 8, max: 80, step: 1, default: 54, unit: 'px', group: 'Tunnels' },
     { key: 'growth', label: 'Widening', type: 'knob', min: 0, max: 1, step: 0.01, default: 0.35, group: 'Tunnels' },
-    { key: 'wander', label: 'Wander', type: 'knob', min: 0, max: 2, step: 0.01, default: 0.8, group: 'Tunnels' },
-    { key: 'grainBias', label: 'Grain bias', type: 'knob', min: 0, max: 1, step: 0.01, default: 0.3, group: 'Tunnels' },
+    { key: 'wander', label: 'Wander', type: 'knob', min: 0, max: 2, step: 0.01, default: 0.6, group: 'Tunnels' },
+    { key: 'grainBias', label: 'Grain bias', type: 'knob', min: 0, max: 1, step: 0.01, default: 0.6, group: 'Tunnels' },
     { key: 'branching', label: 'Branching', type: 'knob', min: 0, max: 1, step: 0.01, default: 0.35, group: 'Tunnels' },
-    { key: 'avoid', label: 'Avoidance', type: 'knob', min: 0, max: 1, step: 0.01, default: 0.7, group: 'Tunnels' },
+    { key: 'avoid', label: 'Avoidance', type: 'knob', min: 0, max: 1, step: 0.01, default: 0.8, group: 'Tunnels' },
     { key: 'chambers', label: 'Chambers', type: 'knob', min: 0, max: 1, step: 0.01, default: 0.4, group: 'Tunnels' },
-    { key: 'frass', label: 'Frass', type: 'knob', min: 0, max: 1, step: 0.01, default: 0.55, group: 'Tunnels' },
+    { key: 'frass', label: 'Frass', type: 'knob', min: 0, max: 1, step: 0.01, default: 0.3, group: 'Tunnels' },
     // Wood
     { key: 'grainScale', label: 'Grain scale', type: 'knob', min: 0.4, max: 3, step: 0.01, default: 1, group: 'Wood' },
     { key: 'weathering', label: 'Weathering', type: 'knob', min: 0, max: 1, step: 0.01, default: 0.7, group: 'Wood' },
-    { key: 'cracks', label: 'Cracks', type: 'knob', min: 0, max: 1, step: 0.01, default: 0.35, group: 'Wood' },
-    { key: 'ragged', label: 'Ragged edge', type: 'knob', min: 0, max: 1, step: 0.01, default: 0.5, group: 'Wood' },
+    { key: 'cracks', label: 'Cracks', type: 'knob', min: 0, max: 1, step: 0.01, default: 0.5, group: 'Wood' },
+    { key: 'ragged', label: 'Ragged edge', type: 'knob', min: 0, max: 1, step: 0.01, default: 0.3, group: 'Wood' },
     // Light
     { key: 'lightAngle', label: 'Light', type: 'dial', min: 0, max: 360, step: 1, default: 305, wrap: true, unit: '°', group: 'Light', live: true },
-    { key: 'relief', label: 'Relief', type: 'knob', min: 0, max: 1, step: 0.01, default: 0.6, group: 'Light', live: true },
+    { key: 'relief', label: 'Relief', type: 'knob', min: 0, max: 1, step: 0.01, default: 0.7, group: 'Light', live: true },
     { key: 'elevation', label: 'Elevation', type: 'knob', min: 20, max: 75, step: 1, default: 38, unit: '°', group: 'Light', live: true },
     { key: 'shadow', label: 'Shadow', type: 'knob', min: 0, max: 1, step: 0.01, default: 0.88, group: 'Light', live: true },
     // Color
     { key: 'palette', label: 'Palette', type: 'select', options: [{ value: 'wood', label: 'Wood' }, { value: 'print', label: 'Print' }], default: 'wood', group: 'Color', live: true },
-    { key: 'surfLight', label: 'Surface', type: 'color', default: '#b0a592', group: 'Color', live: true },
-    { key: 'surfDark', label: 'Grain', type: 'color', default: '#5c5045', group: 'Color', live: true },
+    { key: 'surfLight', label: 'Surface', type: 'color', default: '#a99a86', group: 'Color', live: true },
+    { key: 'surfDark', label: 'Grain', type: 'color', default: '#4a3d33', group: 'Color', live: true },
     { key: 'cut', label: 'Cut wood', type: 'color', default: '#d4c4a4', group: 'Color', live: true },
-    { key: 'frassCol', label: 'Frass', type: 'color', default: '#b08558', group: 'Color', live: true },
+    { key: 'frassCol', label: 'Frass', type: 'color', default: '#9a7650', group: 'Color', live: true },
     { key: 'shadowCol', label: 'Shadow', type: 'color', default: '#17120e', group: 'Color', live: true },
     { key: 'paper', label: 'Paper', type: 'color', default: '#efe7d8', group: 'Color', live: true },
     { key: 'ink', label: 'Ink', type: 'color', default: '#2b1d14', group: 'Color', live: true },
@@ -145,12 +145,13 @@ function buildWood(env, st) {
       const warp = noise.fbm2(X * 0.0013 + o, Y * 0.0004, 3, 2, 0.5);
       const s1 = noise.fbm2(X * 0.011 * gs, Y * 0.0011 + o, 4, 2.1, 0.55);
       const s2 = noise.fbm2(X * 0.05 * gs + 7, Y * 0.003, 3, 2, 0.5);
-      const s3 = noise.noise2(X * 0.22 * gs, Y * 0.012 + o);
+      const s3 = noise.noise2(X * 0.09 * gs, Y * 0.006 + o);
+      const tb = noise.fbm2(X * 0.0035 + 90, Y * 0.0004, 2, 2, 0.5);
       const ph = X * 0.0065 * gs + warp * 2.6;
       let rn = ph - Math.floor(ph);
       const band = rn * rn * rn;
       const blot = noise.noise2(X * 0.0016 + 31, Y * 0.0013);
-      const T = 0.5 + 0.2 * s1 + 0.17 * s2 + (0.09 + 0.09 * we) * s3 - (0.06 + 0.1 * we) * band + 0.05 * we * blot;
+      const T = 0.5 + 0.2 * s1 + 0.17 * s2 + (0.09 + 0.09 * we) * s3 - (0.06 + 0.1 * we) * band + 0.05 * we * blot + 0.2 * tb;
       half[y * hw + x] = T;
       fm[y * hw + x] = 0.5 + 0.5 * s2;
     }
@@ -160,12 +161,15 @@ function buildWood(env, st) {
   const r1 = new Float32Array(w + 8), r2 = new Float32Array(w + 8), r3 = new Float32Array(w + 8);
   for (let i = 0; i < w + 8; i++) { r1[i] = rng() - 0.5; r2[i] = rng() - 0.5; r3[i] = rng() - 0.5; }
   for (let x = 0; x < w; x++) {
-    col[x] = r1[x] * 0.7 + (r2[(x / 3) | 0] + r2[((x / 3) | 0) + 1]) * 0.45 + (r3[(x / 9) | 0]) * 0.5;
+    const q3 = x / 4, q9 = x / 14;
+    const ia = Math.floor(q3), ib = Math.floor(q9);
+    const sm = (f) => f * f * (3 - 2 * f);
+    col[x] = (r2[ia] * (1 - sm(q3 - ia)) + r2[ia + 1] * sm(q3 - ia)) * 0.9 + (r3[ib] * (1 - sm(q9 - ib)) + r3[ib + 1] * sm(q9 - ib)) * 1.2 + r1[x] * 0.12;
   }
   const cf = new Float32Array(w), cp = new Float32Array(w);
-  for (let x = 0; x < w; x++) { cf[x] = 0.006 + rng() * 0.03; cp[x] = rng() * 100; }
+  for (let x = 0; x < w; x++) { cf[x] = 0.002 + rng() * 0.008; cp[x] = rng() * 100; }
   const T = new Uint8Array(w * h);
-  const amp = 0.1 + 0.2 * we;
+  const amp = 0.05 + 0.1 * we;
   for (let y = 0; y < h; y++) {
     const u = y / 2 - 0.25, a = Math.max(0, Math.floor(u)), fy = u - a, a1 = Math.min(hh - 1, a + 1), ac = Math.min(hh - 1, a);
     for (let x = 0; x < w; x++) {
@@ -174,19 +178,19 @@ function buildWood(env, st) {
       const m = fm[ac * hw + bc];
       let q = Math.imul(x, 0x27d4eb2d) ^ Math.imul(y, 0x165667b1);
       q = Math.imul(q ^ (q >>> 15), 0x2c1b3c6d); q ^= q >>> 12;
-      const sp = ((q & 255) / 255 - 0.5) * 0.05;
+      const sp = ((q & 255) / 255 - 0.5) * 0.02;
       const fade = 0.25 + 0.75 * Math.max(0, Math.sin(y * cf[x] + cp[x]) * 0.8 + 0.35);
       const v2 = base + col[x] * amp * (0.2 + m) * fade + sp;
       T[y * w + x] = clamp(v2, 0, 1) * 255;
     }
   }
   // cracks along the grain
-  const nCr = Math.round(params.cracks * 9);
+  const nCr = Math.round(params.cracks * 7);
   for (let k = 0; k < nCr; k++) {
     let cx = rng() * w;
     const y0 = rng() < 0.5 ? 0 : rng() * h * 0.6;
     const len = h * rng.range(0.25, 1.1);
-    const wmax = rng.range(0.9, 2.4) * (w / 1200) + 0.3;
+    const wmax = rng.range(1.4, 4.5) * (w / 1200) + 0.3;
     for (let yy = 0; yy < len; yy++) {
       const y = Math.floor(y0 + yy);
       if (y >= h) break;
@@ -195,7 +199,7 @@ function buildWood(env, st) {
       const taper = Math.pow(Math.sin(Math.PI * clamp(prog)), 0.45);
       const wd = wmax * taper * (0.6 + 0.6 * Math.abs(noise.noise2(yy * 0.03, k * 3.1)));
       const xi = Math.round(cx);
-      for (let dx = -3; dx <= 3; dx++) {
+      for (let dx = -6; dx <= 6; dx++) {
         const x = xi + dx;
         if (x < 0 || x >= w) continue;
         const d = Math.abs(x - cx);
@@ -226,8 +230,9 @@ function setLight(st, p) {
   st.Lx = st.Lxu * cxy;
   st.Ly = st.Lyu * cxy;
   st.tanE = Math.tan(el);
-  st.hs = 4 + 22 * p.relief;
-  st.shStrength = p.shadow;
+  const bt = Math.round(p.mode) === 1;
+  st.hs = (5 + 24 * p.relief) * (bt ? 0.3 : 1);
+  st.shStrength = p.shadow * (bt ? 0.45 : 1);
   st.hsS = st.hs * 0.55; // cast-shadow depth (shorter than wall slope so floors stay lit)
   st.R = Math.min(34, Math.ceil(st.hsS / st.tanE) + 2);
 }
@@ -243,6 +248,13 @@ function prepColors(st, p) {
   } else {
     sl = hexToRgb(p.surfLight); sd = hexToRgb(p.surfDark); cut = hexToRgb(p.cut);
     fr = hexToRgb(p.frassCol); sh = hexToRgb(p.shadowCol);
+  }
+  if (!print && Math.round(p.mode) === 1) {
+    const mx = (a, b, t) => [lerp(a[0], b[0], t), lerp(a[1], b[1], t), lerp(a[2], b[2], t)];
+    sl = mx(sl, [128, 92, 66], 0.6); sd = mx(sd, [58, 38, 26], 0.6); cut = mx(cut, [240, 230, 212], 0.45);
+  }
+  if (!print && Math.round(p.mode) !== 1) {
+    cut = [lerp(cut[0], sl[0], 0.55) * 0.82, lerp(cut[1], sl[1], 0.55) * 0.82, lerp(cut[2], sl[2], 0.55) * 0.82];
   }
   const lut = new Float32Array(768);
   for (let i = 0; i < 256; i++) {
@@ -298,7 +310,7 @@ function processQueue(env, st, p, budgetMs) {
 function litTile(st, tx, ty) {
   const { gw, gh, E, F, LIT, NF, hs, hsS, Lx, Ly, Lz, Lxu, Lyu, tanE, shStrength } = st;
   const x0 = tx * TS, y0 = ty * TS, x1 = Math.min(gw, x0 + TS), y1 = Math.min(gh, y0 + TS);
-  const amb = 0.16;
+  const amb = 0.24;
   const kmax = Math.min(18, Math.ceil(hsS / (tanE * 2)) + 1);
   const dx = Lxu * 2, dy = Lyu * 2;
   for (let y = y0; y < y1; y++) {
@@ -307,8 +319,9 @@ function litTile(st, tx, ty) {
       const i = y * gw + x;
       const e = E[i];
       const xm = x > 0 ? 1 : 0, xp = x < gw - 1 ? 1 : 0;
-      const gxv = (E[i + xp] - E[i - xm]) * 0.5 * hs;
-      const gyv = (E[i + yp] - E[i - ym]) * 0.5 * hs;
+      const x2p = x + 2 < gw ? 2 : xp, x2m = x - 2 >= 0 ? 2 : xm, y2p = y + 2 < gh ? 2 * gw : yp, y2m = y - 2 >= 0 ? 2 * gw : ym;
+      const gxv = ((E[i + xp] - E[i - xm]) * 0.5 + (E[i + x2p] - E[i - x2m]) * 0.25) * 0.5 * hs;
+      const gyv = ((E[i + yp] - E[i - ym]) * 0.5 + (E[i + y2p] - E[i - y2m]) * 0.25) * 0.5 * hs;
       let lit = 1;
       if (e > 0 || gxv !== 0 || gyv !== 0) {
         const lamb = (gxv * Lx + gyv * Ly + Lz) / Math.sqrt(gxv * gxv + gyv * gyv + 1);
@@ -355,7 +368,7 @@ function composeTile(env, st, tx, ty) {
   const px1 = Math.min(w, px0 + TS * S), py1 = Math.min(h, py0 + TS * S);
   if (px0 >= px1 || py0 >= py1) return;
   const lut = col.lut, cut = col.cut, fr = col.fr, shc = col.sh, print = col.print;
-  const gk = 0.012 * (0.4 + p.relief) * Lxu;
+  const gk = 0.006 * (0.4 + p.relief) * Lxu;
   const pap = st.paperC, ink = st.inkC;
   for (let y = py0; y < py1; y++) {
     const ya = yi0[y] * gw, yb = yi1[y] * gw, fy = yf[y], cyy = y >> 1;
@@ -378,7 +391,7 @@ function composeTile(env, st, tx, ty) {
         const hh = (q & 255) / 255;
         const tn = 0.72 + 0.5 * (t / 255);
         const dm = e <= 0.02 ? 0 : smoothstep(0.02, 0.4, e);
-        const ao = 1 - 0.3 * smoothstep(0.3, 1, e);
+        const ao = 1 - 0.3 * (1 - smoothstep(0.3, 0.95, e)) * smoothstep(0.02, 0.3, e) - 0.08 * smoothstep(0.5, 1, e);
         r = lerp(lut[t * 3], cut[0] * tn, dm) * ao;
         g = lerp(lut[t * 3 + 1], cut[1] * tn, dm) * ao;
         b = lerp(lut[t * 3 + 2], cut[2] * tn, dm) * ao;
@@ -421,7 +434,7 @@ function updateE(st, i) {
 // carve a soft-walled disc into the depth field
 function stamp(st, cx, cy, r, rag) {
   const { gw, gh, D, G, F } = st;
-  const ew = clamp(0.3 * r, 1.2, 3.6);
+  const ew = Math.min(clamp(0.45 * r, 2, 5), r * 0.85);
   const pad = r + 4;
   const x0 = Math.max(0, Math.floor(cx - pad)), x1 = Math.min(gw - 1, Math.ceil(cx + pad));
   const y0 = Math.max(0, Math.floor(cy - pad)), y1 = Math.min(gh - 1, Math.ceil(cy + pad));
@@ -520,23 +533,23 @@ function initSim(env, st) {
   st.len = gw / 600;
   sim.cap = Math.ceil(p.population * 4 + 6);
   sim.maxSteps = 260000;
-  sim.budget = mode === 0 ? p.appetite * 0.55 * gw * gh : Infinity;
+  sim.budget = mode === 0 ? p.appetite * 1.5 * gw * gh : Infinity;
   const lifeScale = 0.45 + 1.1 * p.appetite;
   st.lifeScale = lifeScale;
   if (mode === 1) {
-    const n = Math.max(1, Math.round(p.population / 4));
+    const n = p.population > 20 ? 3 : p.population > 9 ? 2 : 1;
     const centers = [];
     for (let k = 0; k < n; k++) {
       let best = null, bd = -1;
       for (let tries = 0; tries < 30; tries++) {
-        const c = [rng.range(0.18, 0.82) * gw, rng.range(0.18, 0.82) * gh];
+        const c = n === 1 ? [gw * rng.range(0.42, 0.58), gh * rng.range(0.46, 0.54)] : [rng.range(0.2, 0.8) * gw, rng.range(0.38, 0.62) * gh];
         let md = 1e9;
         for (const o of centers) md = Math.min(md, Math.hypot(o[0] - c[0], o[1] - c[1]));
         if (md > bd) { bd = md; best = c; }
       }
       centers.push(best);
     }
-    sim.pending = centers.map((c) => ({ c }));
+    sim.pending = centers.map((c) => ({ c, lm: n === 1 ? 1 : n === 2 ? 0.78 : 0.62 }));
   } else if (mode === 2) {
     const n = Math.round(p.population * 5 * (0.3 + 1.4 * p.appetite));
     for (let k = 0; k < n; k++) {
@@ -562,7 +575,7 @@ function spawnTermite(st, p, env) {
     a = AXIS + (rng() < 0.5 ? 0 : Math.PI) + rng.gauss() * (1 - p.grainBias) * 1.4;
   }
   sim.agents.push(newAgent(st, {
-    x, y, a, r0: st.baseR * rng.range(0.7, 1.2), life: rng.range(150, 520) * st.len,
+    x, y, a, r0: st.baseR * rng.range(0.7, 1.2), life: rng.range(300, 900) * st.len,
     grow: p.growth * 0.8, wander: p.wander, bias: p.grainBias, avoid: p.avoid, wv: 0.2, kind: 't', canBranch: true,
   }));
 }
@@ -570,16 +583,16 @@ function spawnTermite(st, p, env) {
 function spawnSystem(st, p, sys) {
   const { rng } = st, sim = st.sim;
   const [cx, cy] = sys.c;
-  const rm = st.baseR * 0.85;
-  const life = rng.range(240, 400) * st.len * st.lifeScale;
-  const jit = 0.05 + (1 - p.grainBias) * 0.35;
+  const rm = st.baseR * 0.2;
+  const lm = sys.lm;
+  const life = st.gh * 0.36 * lm * st.lifeScale * rng.range(0.9, 1.05);
+  const jit = 0.02 + (1 - p.grainBias) * 0.12;
   const a0 = AXIS + rng.gauss() * jit;
-  const nup = newAgent(st, { x: cx, y: cy, a: a0, r0: rm, life: 1 });
-  chamberAt(st, cx, cy, rm * 1.9);
+  chamberAt(st, cx, cy, rm * 1.8);
   for (const dir of [0, Math.PI]) {
     sim.agents.push(newAgent(st, {
-      x: cx, y: cy, a: a0 + dir + rng.gauss() * 0.04, r0: rm, life: life * rng.range(0.7, 1.1), grow: 0, wander: p.wander * 0.3,
-      bias: Math.max(p.grainBias, 0.85), avoid: 0.8, wv: 0.06, kind: 'mother', gap: 14, spawnCnt: rng.range(6, 18), side: rng() < 0.5 ? 1 : -1,
+      x: cx, y: cy, a: a0 + dir, r0: rm, life, grow: 0, wander: 0.1, bias: 1, avoid: 0.9, wv: 0.05, kind: 'mother',
+      armDir: a0 + dir, lm, spawnCnt: 3, side: rng() < 0.5 ? 1 : -1,
     }));
   }
 }
@@ -628,13 +641,14 @@ function stepSim(st, p, env) {
     const prog = ag.age / ag.life;
     let r = ag.r0 * (1 + ag.grow * (2.2 * prog - 0.9));
     r *= 1 + ag.wv * noise.noise3(ag.x * 0.03, ag.y * 0.03, ag.noff);
-    if (r < 1.3) r = 1.3;
+    if (r < 1.0) r = 1.0;
     const turnScale = 6 / (r + 3);
     ag.tr += rng.gauss() * 0.015 * ag.wander - ag.tr * 0.07;
     let da = (ag.tr + noise.noise3(ag.x * 0.012, ag.y * 0.012, ag.noff) * 0.035 * ag.wander) * turnScale;
     if (ag.bias > 0) da -= ag.bias * 0.05 * Math.sin(2 * (ag.a - AXIS));
+    if (ag.fan) da -= 0.03 * Math.min(1, ag.age / 25) * Math.sin(ag.a - ag.armDir) * (0.4 + prog);
     // avoidance of already-carved wood
-    const L1 = r * 1.5 + 3;
+    const L1 = r * 1.5 + 3 + (ag.look || r * 0.5);
     const pl = sampleD(st, ag.x + Math.cos(ag.a - 0.8) * L1, ag.y + Math.sin(ag.a - 0.8) * L1);
     const pr = sampleD(st, ag.x + Math.cos(ag.a + 0.8) * L1, ag.y + Math.sin(ag.a + 0.8) * L1);
     const pc = sampleD(st, ag.x + Math.cos(ag.a) * L1 * 1.2, ag.y + Math.sin(ag.a) * L1 * 1.2);
@@ -678,21 +692,21 @@ function stepSim(st, p, env) {
       }
       if (ag.age > 25 && rng() < p.chambers * 0.0035) {
         chamber(st, ag, r * rng.range(1.5, 2.2));
-        if (rng() < p.frass * 0.5) plug(st, ag, 30 + rng() * 40);
+        if (rng() < p.frass * 0.5) plug(st, ag, 12 + rng() * 22);
       }
     } else if (ag.kind === 'mother') {
       ag.spawnCnt--;
-      if (ag.spawnCnt <= 0 && ag.age > 6) {
+      if (ag.spawnCnt <= 0 && ag.age > 4) {
         ag.side = -ag.side;
-        const rc = ag.r0 * 0.62;
+        const rc = st.baseR * 0.15;
+        const rEnd = rc * 2.1;
+        ag.spawnCnt = rEnd * 1.15 * lerp(1.35, 0.85, p.branching) * rng.range(0.9, 1.15);
         const ca = Math.cos(ag.a), sa = Math.sin(ag.a);
-        const gapBase = rc * 1.9 * 2.3 * lerp(1.7, 0.8, p.branching);
-        ag.spawnCnt = gapBase * rng.range(0.85, 1.25);
-        const ha = ag.a + ag.side * (Math.PI / 2) + rng.gauss() * 0.12;
+        const ha = ag.a + ag.side * (Math.PI / 2) + rng.gauss() * 0.04;
         agents.push(newAgent(st, {
-          x: ag.x - ca * 2 - sa * ag.side * r * 0.5, y: ag.y - sa * 2 + ca * ag.side * r * 0.5, a: ha, r0: rc,
-          life: rng.range(60, 150) * st.len * st.lifeScale, grow: Math.max(p.growth, 0.8), wander: p.wander * 0.45 + 0.1,
-          bias: p.grainBias * 0.35, avoid: Math.min(1, p.avoid * 1.2 + 0.15), wv: 0.08, kind: 'larva',
+          x: ag.x - sa * ag.side * r * 0.8, y: ag.y + ca * ag.side * r * 0.8, a: ha, r0: rc,
+          life: st.gw * rng.range(0.28, 0.5) * ag.lm * st.lifeScale, grow: 0.92, wander: p.wander * 0.35 + 0.05,
+          bias: 0, fan: 1, armDir: ag.armDir, look: 5, avoid: 1, wv: 0.1, kind: 'larva',
         }));
       }
     }
@@ -715,10 +729,9 @@ function endAgent(st, p, ag, r) {
   if (!inside) return;
   if (ag.kind === 't') {
     if (rng() < 0.25 + p.chambers * 0.5) chamber(st, ag, r * rng.range(1.4, 2.0));
-    if (rng() < p.frass * 0.6) plug(st, ag, 20 + rng() * 50);
+    if (rng() < p.frass * 0.6) plug(st, ag, 10 + rng() * 24);
   } else if (ag.kind === 'larva') {
-    if (rng() < 0.55 + 0.45 * p.chambers) chamber(st, ag, r * rng.range(1.3, 1.7));
-    if (rng() < p.frass * 0.5) plug(st, ag, 12 + rng() * 25);
+    if (rng() < 0.3 + 0.5 * p.chambers) chamber(st, ag, r * rng.range(1.2, 1.5));
   } else if (ag.kind === 'mother') {
     chamber(st, ag, r * 1.3);
   } else if (ag.kind === 'worm') {
