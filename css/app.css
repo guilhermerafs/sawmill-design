@@ -200,3 +200,17 @@ button { font: inherit; color: inherit; }
   .top { flex-wrap: wrap; gap: 12px; padding: 12px 16px; }
   .stage-head { flex-wrap: wrap; align-items: start; }
 }
+
+/* ---------- render dialog ---------- */
+.dlg { background: var(--panel); color: var(--ink); border: 1px solid var(--line); border-radius: 12px; padding: 22px 24px; width: min(440px, 92vw); box-shadow: 0 30px 80px rgba(0,0,0,.7); }
+.dlg::backdrop { background: rgba(8,5,3,.72); }
+.dlg h3 { font: 400 26px var(--serif); margin: 0 0 6px; }
+.dlg-sub { color: var(--ink-2); margin: 0 0 16px; font-size: 12px; }
+.dlg-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 16px; }
+.dlg-grid label { display: flex; flex-direction: column; gap: 5px; font-size: 10px; color: var(--ink-2); }
+.dlg select { background: var(--bg-2); color: var(--ink); border: 1px solid var(--line); border-radius: 6px; padding: 6px; font: inherit; font-size: 12px; }
+.bar { height: 6px; background: #1a130e; border-radius: 3px; overflow: hidden; border: 1px solid var(--line); }
+.bar i { display: block; height: 100%; width: 0; background: var(--brass); }
+.dlg-status { font-size: 11px; color: var(--ink-3); margin: 8px 0 0; min-height: 1em; }
+.dlg-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 16px; }
+.btn:disabled { opacity: .45; cursor: default; }

@@ -46,13 +46,33 @@
         <span class="spacer"></span>
         <span class="stat">t <b id="stat-time">0.0 s</b></span>
         <span class="stat">build <b id="stat-setup">–</b></span>
-        <button id="record" class="btn"><i class="ico dot"></i>Rec 8s</button>
+        <button id="record" class="btn"><i class="ico dot"></i>Render video</button>
         <button id="export" class="btn primary"><i class="ico down"></i>PNG</button>
       </div>
-      <p class="hint">Drag knobs up/down · shift for fine · wheel · double-click resets · the small pip at a knob’s corner lets it drift while playing · keys: space, r, s, 1–5</p>
+      <p class="hint">Drag knobs up/down · shift for fine · wheel · double-click resets · the small pip at a knob’s corner lets it drift while playing · keys: space, r, s, 1–2</p>
     </section>
     <aside id="rack" class="rack" aria-label="Controls"></aside>
   </main>
+
+  <dialog id="render-dlg" class="dlg">
+    <h3>Render video</h3>
+    <p class="dlg-sub">Renders every frame at full quality, one at a time, then encodes an MP4. It can take a while on slower machines but the result is always smooth and sharp.</p>
+    <div class="dlg-grid">
+      <label>Length
+        <select id="render-len"><option value="4">4 s</option><option value="8" selected>8 s</option><option value="12">12 s</option><option value="20">20 s</option><option value="30">30 s</option></select></label>
+      <label>Frame rate
+        <select id="render-fps"><option value="24">24 fps</option><option value="30" selected>30 fps</option><option value="60">60 fps</option></select></label>
+      <label>Quality
+        <select id="render-q"><option value="12">Good (12 Mbps)</option><option value="25" selected>High (25 Mbps)</option><option value="50">Max (50 Mbps)</option></select></label>
+    </div>
+    <div class="bar"><i id="render-bar"></i></div>
+    <p id="render-status" class="dlg-status"></p>
+    <p id="render-note" class="dlg-status"></p>
+    <div class="dlg-actions">
+      <button id="render-cancel" class="btn">Close</button>
+      <button id="render-go" class="btn primary">Start render</button>
+    </div>
+  </dialog>
 
   <script type="module" src="js/app.js"></script>
 </body>

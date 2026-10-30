@@ -170,7 +170,7 @@ export default {
       ctx.fillText('loading image…', w / 2, h / 2);
       return;
     }
-    const step = playing ? 2 : 1;
+    const step = playing && !env.offline ? 2 : 1;
     const W = Math.ceil(w / step), H = Math.ceil(h / step);
     const mode = P.mode | 0;
     const period = Math.min(w, h) / P.density;

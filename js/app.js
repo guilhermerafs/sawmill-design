@@ -1,12 +1,10 @@
 import { makeRng, makeNoise } from './lib/noise.js';
 import { CONTROL_TYPES } from './ui/controls.js';
-import termite from './gen/termite.js';
+import { exportVideo, exportSupported } from './lib/exporter.js';
 import log from './gen/log.js';
 import engrave from './gen/engrave.js';
-import texture from './gen/texture.js';
-import roots from './gen/roots.js';
 
-const GENERATORS = [log, termite, engrave, texture, roots];
+const GENERATORS = [log, engrave];
 
 const SIZES = {
   square: [1200, 1200],
@@ -29,6 +27,7 @@ const app = {
   t: 0,
   last: 0,
   size: 'square',
+  exporting: false,
   dirty: false, // a setup is pending
   redraw: false, // a still redraw is pending
   values: {}, // remembered params per generator id
@@ -158,6 +157,7 @@ function applyLfo(t) {
 }
 
 function frame(now) {
+  if (app.exporting) { app.last = now; requestAnimationFrame(frame); return; }
   const dt = Math.min(0.1, (now - (app.last || now)) / 1000);
   app.last = now;
   if (app.dirty) {
@@ -201,33 +201,75 @@ function exportPng() {
   }, 'image/png');
 }
 
-function record() {
-  const btn = $('#record');
-  if (!canvas.captureStream || typeof MediaRecorder === 'undefined') { btn.textContent = 'No recorder'; return; }
-  const stream = canvas.captureStream(30);
-  const type = ['video/webm;codecs=vp9', 'video/webm', 'video/mp4'].find((m) => MediaRecorder.isTypeSupported(m));
-  const rec = new MediaRecorder(stream, { mimeType: type, videoBitsPerSecond: 12e6 });
-  const chunks = [];
-  rec.ondataavailable = (e) => chunks.push(e.data);
-  rec.onstop = () => {
+// Offline render: every frame is drawn at full quality at a fixed timestep and encoded to MP4,
+// so the result is smooth and sharp no matter how slowly this computer draws.
+const dlg = $('#render-dlg');
+let abortCtl = null;
+
+function openRender() {
+  if (!exportSupported()) {
+    $('#render-note').textContent = 'Video encoding needs a recent Chrome, Edge or Safari (WebCodecs).';
+    $('#render-go').disabled = true;
+  } else {
+    $('#render-note').textContent = '';
+    $('#render-go').disabled = false;
+  }
+  const len = $('#render-len');
+  len.querySelector('[data-cycle]')?.remove();
+  const cyc = app.gen.cycle?.(app.env.params) ?? 0;
+  if (cyc > 0 && cyc <= 60) {
+    const o = new Option(`Full cycle (${cyc.toFixed(1)} s)`, cyc.toFixed(3));
+    o.dataset.cycle = '1';
+    len.prepend(o);
+    len.value = o.value;
+  } else len.value = '8';
+  $('#render-bar').style.width = '0%';
+  $('#render-status').textContent = `${canvas.width}×${canvas.height} px, rendered frame by frame`;
+  dlg.showModal();
+}
+
+async function startRender() {
+  const seconds = +$('#render-len').value;
+  const fps = +$('#render-fps').value;
+  const bitrate = +$('#render-q').value * 1e6;
+  const go = $('#render-go');
+  go.disabled = true;
+  $('#render-cancel').textContent = 'Cancel';
+  abortCtl = new AbortController();
+  const wasPlaying = app.playing;
+  app.playing = false;
+  syncPlay();
+  app.exporting = true;
+  app.env.offline = true;
+  setup(); // restart from t = 0 with a fresh build
+  try {
+    const blob = await exportVideo({
+      canvas, fps, seconds, bitrate, signal: abortCtl.signal,
+      renderFrame: (i, t, dt) => { app.t = t; applyLfo(t); app.gen.draw(app.env, t, dt); },
+      onProgress: (n, total, eta) => {
+        $('#render-bar').style.width = `${(100 * n) / total}%`;
+        $('#render-status').textContent = `Frame ${n} / ${total} · about ${Math.ceil(eta)} s left`;
+      },
+    });
     const a = document.createElement('a');
-    a.href = URL.createObjectURL(new Blob(chunks, { type }));
-    a.download = `sawmill-${app.gen.id}.${type.includes('mp4') ? 'mp4' : 'webm'}`;
+    a.href = URL.createObjectURL(blob);
+    a.download = `sawmill-${app.gen.id}-${app.env.params.seed}.mp4`;
     a.click();
-    btn.classList.remove('rec');
-    btn.innerHTML = '<i class="ico dot"></i>Rec 8s';
-  };
-  if (!app.playing) { app.playing = true; syncPlay(); }
-  app.dirty = true;
-  rec.start();
-  btn.classList.add('rec');
-  let left = 8;
-  btn.innerHTML = `<i class="ico dot"></i>${left}s`;
-  const iv = setInterval(() => {
-    left--;
-    btn.innerHTML = `<i class="ico dot"></i>${left}s`;
-    if (left <= 0) { clearInterval(iv); rec.stop(); }
-  }, 1000);
+    setTimeout(() => URL.revokeObjectURL(a.href), 5000);
+    $('#render-status').textContent = `Done · ${(blob.size / 1048576).toFixed(1)} MB saved`;
+  } catch (e) {
+    $('#render-status').textContent = e.message === 'cancelled' ? 'Cancelled' : 'Failed: ' + e.message;
+    if (e.message !== 'cancelled') console.error(e);
+  } finally {
+    app.env.offline = false;
+    app.exporting = false;
+    app.playing = wasPlaying;
+    syncPlay();
+    app.dirty = true;
+    abortCtl = null;
+    go.disabled = false;
+    $('#render-cancel').textContent = 'Close';
+  }
 }
 
 function init() {
@@ -251,7 +293,10 @@ function init() {
     select(app.gen.id);
   });
   $('#export').addEventListener('click', exportPng);
-  $('#record').addEventListener('click', record);
+  $('#record').addEventListener('click', openRender);
+  $('#render-go').addEventListener('click', startRender);
+  $('#render-cancel').addEventListener('click', () => { if (abortCtl) abortCtl.abort(); else dlg.close(); });
+  dlg.addEventListener('cancel', (e) => { if (abortCtl) { e.preventDefault(); abortCtl.abort(); } });
   document.querySelectorAll('#sizes button').forEach((b) => b.addEventListener('click', () => setSize(b.dataset.size)));
   window.addEventListener('keydown', (e) => {
     if (e.target.closest('input')) return;

@@ -317,15 +317,21 @@ export default {
     });
   },
 
+  // Loop length in seconds (used by the video dialog's default length).
+  cycle: (P) => (Math.round(P.motion) === 0 && P.speed > 0 ? 13 / P.speed : 0),
+
   draw(env, t) {
     const { ctx, w, h, params: P, state: S, playing } = env;
     if (!S.F) return;
     const motion = Math.round(P.motion), style = Math.round(P.style);
-    const animated = playing && motion !== 2 && P.speed > 0;
+    // env.offline = deterministic export render: animate by t, but at full resolution and never from cache.
+    const live = playing || env.offline;
+    const moving = live && motion !== 2 && P.speed > 0;
+    const animated = moving && !env.offline;
     const sc = animated ? clamp(Math.sqrt((w * h) / 320000), 1, 2.4) : 1;
 
     const key = [style, P.lineWeight, P.coverage, P.speckle, P.rays, P.ink, P.paper, P.woodLight, P.woodDark].join('|');
-    if (!animated && S.cache && S.cacheKey === key) { ctx.drawImage(S.cache, 0, 0); return; }
+    if (!moving && S.cache && S.cacheKey === key) { ctx.drawImage(S.cache, 0, 0); return; }
 
     const ow = Math.ceil(w / sc), oh = Math.ceil(h / sc);
     const slot = animated ? 'offAnim' : 'offFull';
@@ -342,12 +348,12 @@ export default {
 
     // time -> reveal / breathing
     let reveal = 2, fade = 0, breathe = false, tb = 0;
-    if (playing && motion === 0) {
+    if (live && motion === 0) {
       const p = ((t * P.speed) / 13) % 1;
       const g = clamp(p / 0.7);
       reveal = 1.17 * Math.pow(g, 0.85);
       fade = ss(0.94, 1.0, p);
-    } else if (playing && motion === 1) {
+    } else if (live && motion === 1) {
       breathe = true; tb = t * P.speed * 0.7;
     }
     const sheenA = 0.9 + (breathe ? tb * 0.22 : 0);
@@ -548,7 +554,7 @@ export default {
       ctx.imageSmoothingEnabled = sm;
     } else {
       ctx.drawImage(off, 0, 0);
-      S.cache = off; S.cacheKey = key;
+      if (!moving) { S.cache = off; S.cacheKey = key; }
     }
   },
 };

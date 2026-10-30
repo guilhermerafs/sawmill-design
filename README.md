@@ -5,10 +5,7 @@ A browser workbench for wood-born generative images — knobs, dials, live anima
 | # | Generator | What it makes |
 |---|-----------|---------------|
 | 1 | **Log interior** | Tree-ring cross-sections in woodcut, engraved or polished-slab styles |
-| 2 | **Termite** | Termite mazes, bark-beetle galleries and woodworm holes eaten into weathered wood |
-| 3 | **Engrave** | Turns an uploaded image into ring / contour / banknote / stipple line engravings |
-| 4 | **Texture** | Volumetric wood-grain boards (species, cut depth, knots, rays) |
-| 5 | **Roots** | Botanical root systems grown by space colonization, with optional tree crown |
+| 2 | **Engrave** | Turns an uploaded image into ring / contour / banknote / stipple line engravings |
 
 ## Live
 
@@ -28,8 +25,8 @@ Then visit http://localhost:8000.
 
 - Drag a knob up/down (shift = fine), scroll, arrow keys; double-click resets.
 - The small pip at a knob's corner makes that knob **drift** while playing.
-- Space play/pause · `r` reseed · `s` save PNG · `1`–`5` switch generator.
-- **Rec 8s** captures a WebM of the animation.
+- Space play/pause · `r` reseed · `s` save PNG · `1`–`2` switch generator.
+- **Render video** renders every frame at full quality at a fixed timestep and encodes an MP4 (WebCodecs), so output is smooth and sharp regardless of how fast your machine is — it just takes longer on slow machines.
 
 ## Structure
 
